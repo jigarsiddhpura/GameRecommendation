@@ -2,6 +2,10 @@
 streamlit
 
 # scraping
-
+google-search-results
 
 # model
+
+
+#packages
+python-dotenv

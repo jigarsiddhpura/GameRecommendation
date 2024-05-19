@@ -16,7 +16,7 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
 
 # Load knowledge base
-loader = CSVLoader('./games.csv', encoding='utf-8')
+loader = CSVLoader('./data/games.csv', encoding='utf-8')
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=5120, chunk_overlap=20)
 documents = loader.load_and_split(text_splitter)
 

@@ -22,6 +22,8 @@ langchain-anthropic
 ragas
 transformers
 sentence-transformers
+# spacy
 
 # miscellaneous
 python-dotenv
+uuid

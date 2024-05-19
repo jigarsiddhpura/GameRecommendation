@@ -1,9 +1,15 @@
 import chromadb
 from dotenv import load_dotenv
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, PromptTemplate, StorageContext
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, PromptTemplate, StorageContext, load_index_from_storage
 from llama_index.llms.anthropic import Anthropic
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders.csv_loader import CSVLoader
+from llama_index.core import SimpleDirectoryReader
+from llama_index.core.ingestion import IngestionPipeline
+from llama_index.core.node_parser import SentenceSplitter
+from functions import delta_index
 import os
 load_dotenv()
 
@@ -18,22 +24,38 @@ Settings.llm = Anthropic(model="claude-3-opus-20240229")
 
 ## Loading the knowledge base
 # if not (os.path.join(PERSIST_DIR)):
-documents = SimpleDirectoryReader("./data").load_data()
+documents :list = SimpleDirectoryReader("./data").load_data()
+
+# pipeline = IngestionPipeline(transformations=[SentenceSplitter()])
+# nodes = pipeline.run(documents=documents)
 
 ## Indexing and storing
 
-# initialize client, setting path to save data
-db = chromadb.PersistentClient(path=PERSIST_DIR)
+# delta indexing
+# unique_ids, unique_documents = delta_index(documents)
 
+# initialize client & collection, setting path to save data
+db = chromadb.PersistentClient(path=PERSIST_DIR)
 chroma_collection = db.get_or_create_collection("games")
 
 # assign chroma as the vector_store to the context
 vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
-storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
-# create your index
-vector_index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)
-Settings.vector_index = vector_index
+if not (os.path.join(PERSIST_DIR,'index')):
+    storage_context = StorageContext.from_defaults(vector_store=vector_store)
+    vector_index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)
+else:
+    print("loading from storage")
+    storage_context = StorageContext.from_defaults(vector_store=vector_store, persist_dir=f"{PERSIST_DIR}/index")
+    vector_index = load_index_from_storage(storage_context)
+
+# create your index if doesn't exist
+
+if not (os.path.join(PERSIST_DIR,'index')):
+    print("creating index")
+    vector_index.storage_context.persist(persist_dir=f"{PERSIST_DIR}/index")
+
+Settings.vector_index = vector_index    
 
 tokenizer = Anthropic().tokenizer
 Settings.tokenizer = tokenizer

@@ -4,3 +4,6 @@ nowenv
 
 # files
 eval2.py
+
+# folders
+__pycache__

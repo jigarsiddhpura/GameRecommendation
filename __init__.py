@@ -13,7 +13,7 @@ import chromadb
 
 load_dotenv()
 
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
 if "key" not in st.session_state:
     st.session_state.key = ANTHROPIC_API_KEY

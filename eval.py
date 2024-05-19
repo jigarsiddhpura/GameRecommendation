@@ -12,7 +12,7 @@ import os
 import time
 load_dotenv()
 
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
 
 # Load knowledge base

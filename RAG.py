@@ -14,7 +14,7 @@ import os
 load_dotenv()
 
 PERSIST_DIR = "./vectorDB"
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
 
 # global default

@@ -4,6 +4,7 @@ nowenv
 
 # files
 eval2.py
+test.py
 
 # folders
 __pycache__

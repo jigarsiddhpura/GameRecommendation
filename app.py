@@ -14,10 +14,7 @@ import chromadb
 load_dotenv()
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
-
-if "key" not in st.session_state:
-    st.session_state.key = ANTHROPIC_API_KEY
-os.environ["ANTHROPIC_API_KEY"] = st.session_state.key
+os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
 
 PERSIST_DIR = "./vectorDB"
 
@@ -110,3 +107,4 @@ if prompt := st.chat_input("What's the play mood?!"):
         "role": "assistant",
         "content": full_response
     })
+

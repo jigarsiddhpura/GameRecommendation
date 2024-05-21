@@ -1,3 +1,6 @@
+# deployments
+pysqlite3-binary
+
 # UI
 streamlit
 

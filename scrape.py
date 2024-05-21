@@ -35,7 +35,7 @@ def add_data_from_list_to_csv(file_path, data_list):
 
 
 params = {
-    'api_key': os.environ.get('SERPAPI_KEY'),	    
+    'api_key': os.getenv('SERPAPI_KEY'),	    
     'engine': 'google_play_games',   
 }
 

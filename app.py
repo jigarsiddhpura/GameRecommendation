@@ -9,6 +9,7 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from langchain_community.document_loaders.csv_loader import CSVLoader
 from llama_index.core import SimpleDirectoryReader
 # from functions import delta_index
+import sqlite3
 import chromadb
 
 load_dotenv()

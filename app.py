@@ -90,6 +90,7 @@ for message in st.session_state.messages:
         st.markdown(message['content'])
 
 if prompt := st.chat_input("What's the play mood?!"):
+    st.write("")
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)

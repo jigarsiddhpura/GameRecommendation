@@ -7,6 +7,8 @@ from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_anthropic import AnthropicLLM
 from dotenv import load_dotenv
+from functions import addEvaluations
+from RAG import query_engine
 import torch
 import os
 import time
@@ -22,7 +24,7 @@ documents = loader.load_and_split(text_splitter)
 
 generator_llm = AnthropicLLM(model="claude-2.1")
 # critic_llm = AnthropicLLM(model="claude-3-opus-20240229")  # not working
-critic_llm = Anthropic(model="claude-3-opus-20240229")
+critic_llm = Anthropic(model="claude-3-sonnet-20240229")
 ollama_emb = HuggingFaceEmbeddings(model_name="Snowflake/snowflake-arctic-embed-m")
 
 generator = TestsetGenerator.from_langchain(
@@ -46,3 +48,4 @@ for i,batch in enumerate(batches):
     time.sleep(50)  # Sleep for 50 seconds after each batch to prevent rate_limit errors
     print(f"Batch {i} completed.")
 
+addEvaluations(llm=critic_llm, output_path='./eval.csv', query_engine=query_engine)

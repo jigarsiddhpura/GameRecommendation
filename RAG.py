@@ -11,6 +11,8 @@ from llama_index.core.ingestion import IngestionPipeline
 from llama_index.core.node_parser import SentenceSplitter
 from functions import delta_index
 import os
+import pandas as pd
+import time
 load_dotenv()
 
 PERSIST_DIR = "./vectorDB"
@@ -20,7 +22,7 @@ os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
 # global default
 embed_model = HuggingFaceEmbedding(model_name = "Snowflake/snowflake-arctic-embed-m")
 Settings.embed_model = embed_model
-Settings.llm = Anthropic(model="claude-3-opus-20240229")
+Settings.llm = Anthropic(model="claude-3-sonnet-20240229")
 
 ## Loading the knowledge base
 # if not (os.path.join(PERSIST_DIR)):
@@ -80,7 +82,6 @@ qa_prompt_tmpl = PromptTemplate(qa_prompt_tmpl_str)
 query_engine.update_prompts(
     {"response_synthesizer:text_qa_template": qa_prompt_tmpl}
 )
-
-response = query_engine.query("I want to play shooting games today, do you have any recommendations for me?")
-print(type(response))
+query = "I want to play shooting games today, do you have any recommendations for me?"
+response = query_engine.query(query)
 print(str(response))

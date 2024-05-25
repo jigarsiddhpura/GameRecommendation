@@ -4,6 +4,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
 import time
+import requests
 import os
 from dotenv import load_dotenv
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, PromptTemplate, StorageContext, load_index_from_storage
@@ -32,10 +33,10 @@ if "unique_ids" not in st.session_state:
     st.session_state.unique_ids = []
 
 @st.cache_resource
-def load_model():
+def load_model(ANTHROPIC_API_KEY):
     embed_model = HuggingFaceEmbedding(model_name="Snowflake/snowflake-arctic-embed-m")
     Settings.embed_model = embed_model
-    Settings.llm = Anthropic(model="claude-3-sonnet-20240229")
+    Settings.llm = Anthropic(model="claude-3-opus-20240229")
 
     documents = SimpleDirectoryReader("./data").load_data()
     # pipeline = IngestionPipeline(transformations=[SentenceSplitter()])
@@ -83,34 +84,44 @@ def load_model():
 
     return query_engine
 
-query_engine = load_model()
+if ANTHROPIC_API_KEY := st.text_input(label="Enter Anthropic API key", type="password", placeholder="sk-ant-..."):
+    st.session_state.api_key = ANTHROPIC_API_KEY
+    os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
+
+if ANTHROPIC_API_KEY:
+    query_engine = load_model(ANTHROPIC_API_KEY)
+    st.write("Bot ready ✅")
 
 for message in st.session_state.messages:
     with st.chat_message(message['role']):
         st.markdown(message['content'])
 
-if prompt := st.chat_input("What's the play mood?!"):
-    st.write("")
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
+try:
+    if prompt := st.chat_input("What's the play mood?!"):
+            st.write("")
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.markdown(prompt)
 
-    with st.chat_message("assistant"):
-        with st.spinner("Collecting answer"):
-            message_placeholder = st.empty()
-            full_response = ""
-            result = query_engine.query(prompt)
-            assistant_response = str(result)
+            with st.chat_message("assistant"):
+                with st.spinner("Collecting answer"):
+                    message_placeholder = st.empty()
+                    full_response = ""
+                    result = query_engine.query(prompt)
+                    assistant_response = str(result)
 
-    for chunk in assistant_response:
-        full_response += chunk + ""
-        time.sleep(0.01)
-        message_placeholder.markdown(full_response + "▌")
+            for chunk in assistant_response:
+                full_response += chunk + ""
+                time.sleep(0.01)
+                message_placeholder.markdown(full_response + "▌")
 
-    message_placeholder.markdown(full_response)
+            message_placeholder.markdown(full_response)
 
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": full_response
-    })
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": full_response
+            })
+except Exception as err:
+    st.error(f"API Key Error: {err}")
+    exit()
 

@@ -1,8 +1,7 @@
 # PLAY-EPIC 🎮
 
 ## 🔗 Links
-[![Streamlit](https://img.shields.io/badge/-Streamlit%20deployed%20URL-green)](https://playepic.streamlit.app/)  
-[![Notion](https://img.shields.io/badge/-Notion%20documentation%20kam%20approach-white)](https://discovered-honeycup-303.notion.site/PLAY-EPIC-cc018abf1fce45c1874968c7d8250556)
+[![Streamlit](https://img.shields.io/badge/-Streamlit%20deployed%20URL-green)](https://playepic.streamlit.app/)  [![Notion](https://img.shields.io/badge/-Notion%20documentation%20kam%20approach-white)](https://discovered-honeycup-303.notion.site/PLAY-EPIC-cc018abf1fce45c1874968c7d8250556)
 
 ## ⚙ Tools Used
 - ![LlamaIndex](https://img.shields.io/badge/-LlamaIndex-blue)  for orchestration

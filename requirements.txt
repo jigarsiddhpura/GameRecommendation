@@ -1,5 +1,6 @@
 # deployments
-pysqlite3-binary
+pysqlite3-binarybui
+protobuf==3.20.3
 
 # UI
 streamlit

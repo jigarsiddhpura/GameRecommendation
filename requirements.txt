@@ -1,5 +1,5 @@
 # deployments
-pysqlite3-binarybui
+# pysqlite3-binarybui
 protobuf==3.20.3
 
 # UI

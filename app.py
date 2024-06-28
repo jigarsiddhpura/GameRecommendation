@@ -1,6 +1,6 @@
-# __import__('pysqlite3')
-# import sys
-# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
 import time
@@ -14,7 +14,7 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from langchain_community.document_loaders.csv_loader import CSVLoader
 from llama_index.core import SimpleDirectoryReader
 # from functions import delta_index
-# import sqlite3
+import sqlite3
 import chromadb
 
 load_dotenv()
